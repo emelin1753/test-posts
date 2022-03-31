@@ -10,8 +10,11 @@ export default {
 
 <style scoped>
 .footer-main {
-  position: absolute;
+  background-color: white;
+  position: fixed;
+  left: 0;
   bottom: 0;
   padding: 10px;
+  width: 100%;
 }
 </style>

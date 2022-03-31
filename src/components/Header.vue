@@ -26,6 +26,7 @@ export default {
 
 <style scoped>
 .header-main {
+  background-color: white;
   position: sticky;
   top: 0;
   display: grid;
