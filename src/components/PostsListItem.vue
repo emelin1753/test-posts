@@ -8,7 +8,9 @@
       <div class="post-list-body">{{ post.body }}</div>
       <div>
         <span>&#128488; {{ post.comments.length }}</span>
-        <button class="post-list-button">&#128397;</button>
+        <router-link class="post-list-link" :to="links.post + post.id"
+          >&#128397;</router-link
+        >
       </div>
     </div>
     <div class="post-list-img-media">
@@ -18,6 +20,8 @@
 </template>
 
 <script>
+import links from "@/router/links";
+
 export default {
   name: "PostsListItem",
 
@@ -28,7 +32,9 @@ export default {
     },
   },
 
-  data: () => ({}),
+  data: () => ({
+    links,
+  }),
 };
 </script>
 
@@ -61,11 +67,9 @@ export default {
 .post-list-img-media {
   display: none;
 }
-.post-list-button {
-  border: none;
-  cursor: pointer;
-  background-color: white;
+.post-list-link {
   margin-left: 20px;
+  text-decoration: none;
 }
 @media (max-width: 768px) {
   .post-list-wrap {

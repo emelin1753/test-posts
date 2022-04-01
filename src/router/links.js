@@ -1,5 +1,5 @@
 const links = {
   home: "/",
-  posts: "/",
+  post: "/post/",
 };
 export default links;

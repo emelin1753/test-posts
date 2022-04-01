@@ -3,6 +3,9 @@
     <div v-for="(item, index) in posts" :key="index">
       <PostsListItem :post="item" />
     </div>
+    <template v-if="!posts.length">
+      <p>Постов нет</p>
+    </template>
   </div>
 </template>
 
