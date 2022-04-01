@@ -1,4 +1,5 @@
 export const limitPosts = 9; //  количество постов на страницу
+export const countPages = 10; //  количество страниц для пагинации
 
 function getUrl(path, params) {
   const apiUrl = "https://jsonplaceholder.typicode.com";
@@ -17,12 +18,10 @@ export async function fetchAPI(
   // параметры запроса
   const params = {
     method, // HTTP request method
-    referrerPolicy: "no-referrer",
     headers: {},
-    credentials: "same-origin",
   };
 
-  if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+  if (["PATCH"].includes(method)) {
     params.headers["Content-Type"] = "application/json";
     params.body = JSON.stringify(data);
   }

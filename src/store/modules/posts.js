@@ -1,7 +1,8 @@
 import mutations from "../mutations";
 import { fetchAPI, limitPosts } from "@/helpers/fetch";
 
-const { POSTS, CURRENT_PAGE, POST_ITEM, POST_COMMENTS } = mutations;
+const { POSTS, CURRENT_PAGE, POST_ITEM, POST_COMMENTS, CURRENT_SEARCH } =
+  mutations;
 
 const posts = {
   namespaced: true,
@@ -10,6 +11,7 @@ const posts = {
     postItem: {},
     postComments: [],
     currentPage: 1,
+    currentSearch: "",
   },
   getters: {
     posts: ({ posts }) => posts,
@@ -17,6 +19,7 @@ const posts = {
     currentPage: ({ currentPage }) => currentPage,
     postItem: ({ postItem }) => postItem,
     postComments: ({ postComments }) => postComments,
+    currentSearch: ({ currentSearch }) => currentSearch,
   },
   mutations: {
     [POSTS](state, value) {
@@ -31,13 +34,16 @@ const posts = {
     [POST_COMMENTS](state, value) {
       state.postComments = value;
     },
+    [CURRENT_SEARCH](state, value) {
+      state.currentSearch = value;
+    },
   },
   actions: {
-    async updatePosts({ commit, getters }, search = "") {
-      const { currentPage } = getters;
+    async updatePosts({ commit, getters }) {
+      const { currentPage, currentSearch } = getters;
       let params = `?_page=${currentPage}&_limit=${limitPosts}&_embed=comments`;
-      if (String(search).trim() !== "") {
-        params += `&q=${search}`;
+      if (String(currentSearch).trim() !== "") {
+        params += `&q=${currentSearch}`;
       }
       try {
         const response = await fetchAPI("/posts/", params);
@@ -49,6 +55,10 @@ const posts = {
 
     setCurrentPage({ commit }, page) {
       commit(CURRENT_PAGE, page);
+    },
+
+    setCurrentSearch({ commit }, search) {
+      commit(CURRENT_SEARCH, search);
     },
 
     async getPost({ commit }, id) {

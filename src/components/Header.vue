@@ -1,41 +1,46 @@
 <template>
   <div class="header-main">
     <span class="logo">logo</span>
-    <router-link class="posts-media" :to="links.home"
-      ><h3>Посты</h3></router-link
-    >
+    <h3 class="posts-media">Посты</h3>
     <span class="search-wrap"
       >&#x1F50D;
       <input
         class="search"
         type="search"
         placeholder="Поиск"
-        v-model="search"
-        @input="inputSearch"
+        v-model="currentSearchModel"
       />
     </span>
-    <router-link class="posts" :to="links.home">&#128187; Посты</router-link>
+    <span class="posts">&#128187; Посты</span>
   </div>
 </template>
 
 <script>
-import links from "@/router/links";
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "HeaderMain",
 
-  data: () => ({
-    links,
-    search: "",
-  }),
-
   methods: {
-    ...mapActions("posts", ["updatePosts", "setCurrentPage"]),
+    ...mapActions("posts", [
+      "updatePosts",
+      "setCurrentPage",
+      "setCurrentSearch",
+    ]),
+  },
 
-    inputSearch() {
-      this.setCurrentPage(1);
-      this.updatePosts(this.search);
+  computed: {
+    ...mapGetters("posts", ["currentSearch"]),
+
+    currentSearchModel: {
+      get() {
+        return this.currentSearch;
+      },
+      set(value) {
+        this.setCurrentPage(1);
+        this.setCurrentSearch(value);
+        this.updatePosts();
+      },
     },
   },
 };
@@ -43,9 +48,6 @@ export default {
 
 <style scoped>
 .header-main {
-  background-color: white;
-  position: sticky;
-  top: 0;
   display: grid;
   grid-template-columns: 2fr auto 1fr;
 }
@@ -68,12 +70,9 @@ export default {
   text-shadow: 0 0 0 var(--primary);
   justify-self: end;
   padding-right: 10px;
-  cursor: pointer;
-  text-decoration: none;
 }
 .posts-media {
   display: none;
-  text-decoration: none;
   color: var(--text-color);
 }
 .logo {
@@ -83,6 +82,9 @@ export default {
 @media (max-width: 768px) {
   .header-main {
     grid-template-columns: 1fr;
+  }
+  .search {
+    width: 90%;
   }
   .posts {
     display: none;

@@ -130,10 +130,6 @@ export default {
   border-radius: 3px;
   width: 150px;
 }
-.btn-save:hover,
-.btn-cansel:hover {
-  opacity: 0.5;
-}
 .btn-cansel {
   background-color: white;
   border: 1px solid var(--primary);

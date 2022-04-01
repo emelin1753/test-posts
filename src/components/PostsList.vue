@@ -1,17 +1,19 @@
 <template>
   <div class="posts-wrap">
-    <div v-for="(item, index) in posts" :key="index">
-      <PostsListItem :post="item" />
+    <p v-if="!posts.length">Постов нет</p>
+    <div v-else class="posts-list-wrap">
+      <div v-for="(item, index) in posts" :key="index">
+        <PostsListItem :post="item" />
+      </div>
     </div>
-    <template v-if="!posts.length">
-      <p>Постов нет</p>
-    </template>
+    <PaginateComp class="posts-paginate" @setPage="setPage" />
   </div>
 </template>
 
 <script>
 import PostsListItem from "./PostsListItem.vue";
 import { mapGetters, mapActions } from "vuex";
+import PaginateComp from "./Paginate.vue";
 
 export default {
   name: "PostsList",
@@ -21,28 +23,37 @@ export default {
   },
 
   methods: {
-    ...mapActions("posts", ["updatePosts"]),
+    ...mapActions("posts", ["updatePosts", "setCurrentPage"]),
+
+    setPage(value) {
+      this.setCurrentPage(value);
+      this.updatePosts();
+    },
   },
 
   computed: {
     ...mapGetters("posts", ["posts", "postsCount"]),
   },
 
-  components: { PostsListItem },
+  components: { PostsListItem, PaginateComp },
 };
 </script>
 
 <style scoped>
-.posts-wrap {
+.posts-list-wrap {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: 20px;
   row-gap: 25px;
   justify-items: center;
-  padding: 20px 20px 0px 20px;
+  padding: 20px;
+}
+.posts-paginate {
+  text-align: right;
+  padding-right: 20px;
 }
 @media (max-width: 768px) {
-  .posts-wrap {
+  .posts-list-wrap {
     grid-template-columns: 1fr;
   }
 }
